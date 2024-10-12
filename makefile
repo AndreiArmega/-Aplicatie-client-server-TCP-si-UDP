@@ -1,0 +1,27 @@
+CC = gcc
+CFLAGS = -Wall -g
+LDFLAGS = -lm
+
+SERVER_SOURCES = server.c client_data.c socket_modifiers.c
+SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
+SERVER_EXECUTABLE = server
+
+SUBSCRIBER_SOURCES = client.c client_data.c socket_modifiers.c
+SUBSCRIBER_OBJECTS = $(SUBSCRIBER_SOURCES:.c=.o)
+SUBSCRIBER_EXECUTABLE = subscriber
+
+.PHONY: all clean
+
+all: $(SERVER_EXECUTABLE) $(SUBSCRIBER_EXECUTABLE)
+
+$(SERVER_EXECUTABLE): $(SERVER_OBJECTS)
+	$(CC) $^ -o $@ $(LDFLAGS)
+
+$(SUBSCRIBER_EXECUTABLE): $(SUBSCRIBER_OBJECTS)
+	$(CC) $^ -o $@ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(SERVER_OBJECTS) $(SUBSCRIBER_OBJECTS) $(SERVER_EXECUTABLE) $(SUBSCRIBER_EXECUTABLE)
